@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, defineProps } from 'vue';
-import { Product } from '@/model/ProductDTO';
+import { type Product } from '../model/ProductDTO'; // Update the import path to the correct location of the module
 
 const props = defineProps<{product: Product | null}>();
 
