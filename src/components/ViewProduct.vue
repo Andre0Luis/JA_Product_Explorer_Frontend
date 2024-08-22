@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, defineProps } from 'vue';
-import { Product } from '@/model/ProductDTO';
+import type { Product } from '../model/ProductDTO';
 
 const props = defineProps<{product: Product | null}>();
 

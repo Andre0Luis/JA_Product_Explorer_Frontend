@@ -15,59 +15,29 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, onMounted, nextTick, watch } from 'vue';
 import { BrowserMultiFormatReader, Exception } from "@zxing/library";
-import { ref, onMounted, nextTick, watch } from 'vue';
 
-export default {
+export default defineComponent({
   name: "BarcodeReader",
 
-  data() {
-    return {
-      isLoading: true,
-      codeReader: new BrowserMultiFormatReader(),
-      isMediaStreamAPISupported: navigator && navigator.mediaDevices && "enumerateDevices" in navigator.mediaDevices,
-      barcode: '',
-      decodedText: '',
-      isScanning: false // Inicialmente o scanner está minimizado
-    };
-  },
+  setup(_, { emit }) {
+    const isLoading = ref(true);
+    const codeReader = new BrowserMultiFormatReader();
+    const isMediaStreamAPISupported = ref(navigator && navigator.mediaDevices && "enumerateDevices" in navigator.mediaDevices);
+    const barcode = ref('');
+    const decodedText = ref('');
+    const isScanning = ref(false);
+    const barcodeInput = ref<HTMLInputElement | null>(null);
+    const scanner = ref<HTMLVideoElement | null>(null);
 
-  mounted() {
-    if (!this.isMediaStreamAPISupported) {
-      throw new Exception("Media Stream API is not supported");
-      return;
-    }
-
-    nextTick(() => {
-      this.initVideo();
-    });
-  },
-
-  beforeUnmount() {
-    this.codeReader.reset();
-  },
-
-  watch: {
-    isScanning(newVal) {
-      if (newVal) {
-        nextTick(() => {
-          this.initVideo();
-          this.start();
-        });
-      } else {
-        this.stopScanning();
-      }
-    }
-  },
-
-  methods: {
-    start() {
-      this.codeReader.decodeFromVideoDevice(undefined, this.$refs.scanner, (result, err) => {
+    const start = () => {
+      codeReader.decodeFromVideoDevice(null, scanner.value!, (result, err) => {
         if (result) {
-          this.barcode = result.text; // Atualiza o campo de entrada com o valor decodificado
-          this.$emit('decode', result.text); // Emite o evento com o texto decodificado
-          this.stopScanning(); // Para o scanner e fecha a janela
+          barcode.value = result.getText();
+          emit('decode', result.getText());
+          stopScanning();
         }
         if (err && !(err instanceof Exception)) {
           console.error(err);
@@ -75,34 +45,69 @@ export default {
       }).catch(err => {
         console.error(err);
       });
-    },
+    };
 
-    stopScanning() {
-      this.codeReader.reset(); // Para o vídeo
-      this.isLoading = true; // Mostra a janela de scan
-      this.isScanning = false; // Oculta a janela de scan
-    },
+    const stopScanning = () => {
+      codeReader.reset();
+      isLoading.value = true;
+      isScanning.value = false;
+    };
 
-    handleButtonClick() {
-      this.isScanning = !this.isScanning;
-      this.isLoading = !this.isLoading;
-    },
+    const handleButtonClick = () => {
+      isScanning.value = !isScanning.value;
+      isLoading.value = !isLoading.value;
+    };
 
-    handleManualInput() {
-      this.decodedText = this.$refs.barcodeInput.value;
-      this.$emit('decode', this.decodedText);
-    },
+    const handleManualInput = () => {
+      decodedText.value = barcodeInput.value?.value || '';
+      emit('decode', decodedText.value);
+    };
 
-    initVideo() {
-      if (this.$refs.scanner) {
-        this.$refs.scanner.oncanplay = (event) => {
-          this.isLoading = false;
-          this.$emit("loaded");
+    const initVideo = () => {
+      if (scanner.value) {
+        scanner.value.oncanplay = () => {
+          isLoading.value = false;
+          emit("loaded");
         };
       }
-    },
-  },
-};
+    };
+
+    onMounted(() => {
+      if (!isMediaStreamAPISupported.value) {
+        throw new Exception("Media Stream API is not supported");
+      }
+
+      nextTick(() => {
+        initVideo();
+      });
+    });
+
+    watch(isScanning, (newVal) => {
+      if (newVal) {
+        nextTick(() => {
+          initVideo();
+          start();
+        });
+      } else {
+        stopScanning();
+      }
+    });
+
+    return {
+      isLoading,
+      barcode,
+      decodedText,
+      isScanning,
+      barcodeInput,
+      scanner,
+      handleButtonClick,
+      handleManualInput,
+      initVideo,
+      start,
+      stopScanning
+    };
+  }
+});
 </script>
 
 <style scoped>

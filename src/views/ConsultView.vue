@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import ViewProduct from '@/components/ViewProduct.vue'
-import ConsultProduct from '@/components/ConsultProduct.vue';
-import BarcodeReader from '@/components/BarcodeReader.vue';
-import { text } from 'stream/consumers';
-import SearchExplorerService from '@/services/SearchExplorerService';
-import type { Product } from '@/model/ProductDTO';
+import ViewProduct from '../components/ViewProduct.vue'
+import BarcodeReader from '../components/BarcodeReader.vue';
+import SearchExplorerService from '../services/SearchExplorerService';
+import type { Product } from '../model/ProductDTO';
 
 const barcode = ref('');
 const product = ref<Product | null>(null);
