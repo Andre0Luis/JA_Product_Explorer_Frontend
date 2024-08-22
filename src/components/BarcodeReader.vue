@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <input type="text" v-model="barcode" placeholder="Digite o Código de Barras">
-    <button @click="handleButtonClick">Pesquisar</button>
-    <p v-if="decodedText">Decoded Text: {{ decodedText }}</p>
+  <div class="scanner">
+    <input type="text" v-model="barcode" ref="barcodeInput" placeholder="Digite o Código de Barras">
+    <div>
+    <button @click="handleButtonClick">Scanner</button>
+    <button @click="handleManualInput">Pesquisar</button>
+    </div>
     <div class="scanner-container" v-if="isScanning">
       <div v-show="!isLoading">
         <video poster="data:image/gif,AAAA" ref="scanner"></video>
@@ -63,9 +65,8 @@ export default {
     start() {
       this.codeReader.decodeFromVideoDevice(undefined, this.$refs.scanner, (result, err) => {
         if (result) {
-          console.log(result.text);
           this.barcode = result.text; // Atualiza o campo de entrada com o valor decodificado
-          this.$emit('decode', result.text);
+          this.$emit('decode', result.text); // Emite o evento com o texto decodificado
           this.stopScanning(); // Para o scanner e fecha a janela
         }
         if (err && !(err instanceof Exception)) {
@@ -85,8 +86,11 @@ export default {
     handleButtonClick() {
       this.isScanning = !this.isScanning;
       this.isLoading = !this.isLoading;
-      console.log(this.isScanning);
-      console.log(this.isLoading);
+    },
+
+    handleManualInput() {
+      this.decodedText = this.$refs.barcodeInput.value;
+      this.$emit('decode', this.decodedText);
     },
 
     initVideo() {
@@ -94,7 +98,6 @@ export default {
         this.$refs.scanner.oncanplay = (event) => {
           this.isLoading = false;
           this.$emit("loaded");
-          console.log("Video can play");
         };
       }
     },
@@ -103,6 +106,7 @@ export default {
 </script>
 
 <style scoped>
+
 video {
   max-width: 100%;
   max-height: 100%;
@@ -154,5 +158,15 @@ input {
   border-radius: 5px;
   margin: 10px 0;
   width: 100%;
+}
+
+.scanner button {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 10px 0;
+  width: 30%;
+  margin-right: 10px; 
 }
 </style>

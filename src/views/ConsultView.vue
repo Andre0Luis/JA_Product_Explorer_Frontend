@@ -1,19 +1,41 @@
 <script setup lang="ts">
-import ViewProduct from '../components/ViewProduct.vue'
+import { ref } from 'vue';
+import ViewProduct from '@/components/ViewProduct.vue'
 import ConsultProduct from '@/components/ConsultProduct.vue';
 import BarcodeReader from '@/components/BarcodeReader.vue';
+import { text } from 'stream/consumers';
+import SearchExplorerService from '@/services/SearchExplorerService';
+import type { Product } from '@/model/ProductDTO';
+
+const barcode = ref('');
+const product = ref<Product | null>(null);
+const error = ref('');
+
+async function handleBarcodeInput(text: string) {
+    barcode.value = text;
+    try {
+        const response = await SearchExplorerService.getProduct(barcode.value);
+        product.value = response;
+        error.value = '';
+  } catch (err) {
+    product.value = null;
+    error.value = 'Produto não encontrado';
+  }
+}
+
 
 </script>
 
 <template>
     <div class="barcode_reader">
         <h1>Leitor de Código de Barras</h1>
-        <ConsultProduct></ConsultProduct>
-        <BarcodeReader></BarcodeReader>
+        <BarcodeReader @decode="handleBarcodeInput"></BarcodeReader>
     </div>
     <div class="background">        
         <h1>Consulta de Produtos</h1>
-        <ViewProduct></ViewProduct>
+        <ViewProduct :product="product" v-if="product"></ViewProduct>
+        <p v-else-if="error">{{ error }}</p>
+
         
     </div>
 </template>
