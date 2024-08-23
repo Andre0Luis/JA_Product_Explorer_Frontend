@@ -1,10 +1,9 @@
 import axios from 'axios';
 import type { Product, ProductResponse } from '../model/ProductDTO'; // Importe as interfaces
- // Importe as interfaces
 
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/product-explorer/api', // Substitua pela URL do seu backend
+  baseURL: 'https://ja-product-explorer-backend-3492383069f0.herokuapp.com/product-explorer/api', // Substitua pela URL do seu backend
   headers: {
     'Content-Type': 'application/json',
   },
