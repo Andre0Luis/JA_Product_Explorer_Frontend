@@ -25,12 +25,6 @@ const props = defineProps<{product: Product | null}>();
             <p>{{ product?.codigoDeBarras }}</p>
         </div>
     </div>
-    <div class="error" v-else>
-      <p>Produto não encontrado</p>
-      <transition name="blink">
-        <div v-if="props.product && Object.keys(props.product).length === 0" key="blink"></div>
-      </transition>
-    </div>
 </template>
 
 
@@ -77,6 +71,12 @@ const props = defineProps<{product: Product | null}>();
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.error p {
+    font-size: 2.0rem;
+    margin-block: 10px;
+    color: white;
 }
 
 </style>

@@ -17,7 +17,7 @@ async function handleBarcodeInput(text: string) {
         error.value = '';
   } catch (err) {
     product.value = null;
-    error.value = 'Produto não encontrado';
+    error.value = 'Produto não encontrado 😐';
   }
 }
 
@@ -72,5 +72,15 @@ async function handleBarcodeInput(text: string) {
     font-size: 1.5rem;
     text-align: center;
     margin-block: 10px;
+}
+.barcode_reader p {
+    font-size: 2.0rem;
+    margin-block: 10px;
+}
+
+.background p {
+    font-size: 1.0rem;
+    margin-block: 10px;
+    color: #ffffff;
 }
 </style>

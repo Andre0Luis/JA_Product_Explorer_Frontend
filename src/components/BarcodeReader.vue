@@ -36,7 +36,7 @@ export default defineComponent({
       codeReader.decodeFromVideoDevice(null, scanner.value!, (result, err) => {
         if (result) {
           barcode.value = result.getText();
-          emit('decode', result.getText());
+          emit('decode', result.getText()); 
           stopScanning();
         }
         if (err && !(err instanceof Exception)) {
