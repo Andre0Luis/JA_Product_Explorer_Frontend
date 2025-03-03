@@ -1,9 +1,8 @@
 import axios from 'axios';
-import type { Product, ProductResponse } from '../model/ProductDTO'; // Importe as interfaces
-
+import type { Product, ProductResponse } from '../model/ProductDTO';
 
 const apiClient = axios.create({
-  baseURL: 'https://ja-product-explorer-backend-3492383069f0.herokuapp.com/product-explorer/api', // Substitua pela URL do seu backend
+  baseURL: 'https://ja-product-explorer-backend-3492383069f0.herokuapp.com/product-explorer/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,7 +10,7 @@ const apiClient = axios.create({
 
 export default {
   async getProduct(barcode: string): Promise<Product> {
-    const response = await apiClient.get<Product>(`/products?code=${barcode}`);
+    const response = await apiClient.get<Product>(`/products/${barcode}`);
     return response.data;
   },
 
