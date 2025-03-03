@@ -43,12 +43,12 @@ const props = defineProps<{product: Product | null}>();
 }
 .product-info h2 {
     color: #000000;
-    font-size: 1.5rem;
+    font-size: 20px;
     margin-block: 10px;
     font-weight: bold;
 }
 .product-info p {
-    font-size: 2.0rem;
+    font-size: 16px;
     margin-block: 10px;
 }
 .error p {
