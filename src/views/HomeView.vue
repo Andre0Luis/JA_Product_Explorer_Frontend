@@ -1,10 +1,9 @@
 <template>
   <div class="container">
-    <h1>Escolha uma opção</h1>
     <div class="button-group">
-      <button @click="cadastrarItem">Cadastrar Item no Inventário</button>
-      <button @click="consultarProduto">Consultar Produto</button>
-      <button @click="editarCadastro">Editar Cadastro</button>
+      <button @click="cadastrarItem" disabled>Cadastrar Item no Inventário</button>
+      <button @click="consultarProduto" disabled>Consultar Produto</button>
+      <button @click="editarCadastro" disabled>Editar Cadastro</button>
       <button @click="enviarOi">Enviar um Oi para 🌷</button>
     </div>
   </div>
