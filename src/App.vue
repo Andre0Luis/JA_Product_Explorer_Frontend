@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
+import HomeDescription from './components/HomeDescription.vue';</script>
 
 <template>
   <header>
@@ -9,6 +8,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="Luizinho Explorer" />
+      <HomeDescription msg="Bem-vindo ao Luizinho Explorer" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -37,6 +37,7 @@ nav {
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 nav a.router-link-exact-active {

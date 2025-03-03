@@ -18,16 +18,17 @@
 <style scoped>
 .container {
   max-width: 800px;
-  background: rgb(130, 130, 130);
+  background: rgb(120, 236, 158);
   padding: 20px;
   margin: auto;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  color: #ffffff;
+  color: #000000;
 }
 h1 {
-  color: #ffffff;
+  color: #000000;
+  font-weight: bold;
 }
 p {
   text-align: justify;
